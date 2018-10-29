@@ -18,21 +18,21 @@ The City of Chicago digitally publishes all business license data from 2002 onwa
 
 <img src="tables/top10.png">
 
-Property value indicators for all Chicago zipcodes throughout this time period are readily available via the Zillow API. The market shows a city-wide positive trend across the past two decades, interrupted by the 2008 financial crisis.
+Property value indicators for all Chicago zip codes throughout this time period are readily available via the Zillow API. The market shows a city-wide positive trend across the past two decades, interrupted by the 2008 financial crisis.
 
 <img src="figures/value_trends.png">
 
 
 ## Objective
 
-For my project, I plan to build a predictive model relating the many complex features of Chicago neighborhood business activities to their respective change in property values. While my data are limited to Chicago, any insights and methods derived from my project should be applicable to other cities. Furthermore, the approach could be extended to a finer geographic scale should property value data become available at sub-zipcode resolution.
+For my project, I plan to build a predictive model relating the many complex features of Chicago neighborhood business activities to their respective change in property values. The data are limited to Chicago, but any insights and methods derived from my project will be applicable to other cities. Furthermore, the approach could be extended to a finer geographic scale should property value data become available at sub-zip code resolution.
 
 
 ## Preliminary Analysis
 
 #### Business License Trends
 
-As an initial effort, I obtained and pre-processed the license and real estate data, then surveyed their dynamic trends. Some anomalies unique to Chicago caught my attention. Most notably, the city government consolidated its licensing categories in 2012 leading to an abnormally high rate of apparent license turnover in 2011/2012. I excluded those two years from the data, then imputed their values from 2013. I then compiled license renewal, addition, and turnover timeseries for each zipcode in Chicago. The magnitudes of these quantities depdend upon the size and population density of each zipcode, so I normalized the rates of license addition (newly issued) and turnover (cancelled/revoked) by the annual renewal rate. The timeseries data are quite noisy so I applied some smoothing where necessary. The data reflect a substantial city-wide decrease in the rate of license renewals that coincides with the 2008 recession.
+As an initial effort, I obtained and pre-processed the license and real estate data, then surveyed their dynamic trends. Some anomalies unique to Chicago caught my attention. Most notably, the city government consolidated its licensing categories in 2012 leading to an abnormally high rate of apparent license turnover in 2011/2012. I excluded those two years from the data, then imputed their values from 2013. I then compiled license renewal, addition, and turnover timeseries for each zip code in Chicago. The magnitudes of these quantities depend upon the size and population density of each zip code, so I normalized the rates of license addition (newly issued) and turnover (cancelled/revoked) by the annual renewal rate. The timeseries data are quite noisy so I applied some smoothing where necessary. The data reflect a substantial city-wide decrease in the rate of license renewals that coincides with the 2008 recession.
 
 <img src="figures/renewals.png">
 
@@ -47,7 +47,7 @@ The real estate data reflect a known reality: Chicago's North side has higher pr
 
 <img src="figures/property_values.png">
 
-To account for this, I normalized each property value timeseries by the earliest available property value of the corresponding zipcode, then applied a log transform. The resultant timeseries therefore reflect return on investment relative to the first year in the data. Indeed, property values on the North side have dramatically outperformed the South side relative to the market average over the past two decades.
+To account for this, I normalized each property value timeseries by the earliest available property value of the corresponding zip code, then applied a log transform. The resultant timeseries therefore reflect return on investment relative to the first year in the data. Indeed, property values on the North side have dramatically outperformed the South side relative to the market average over the past two decades.
 
 <img src="figures/relative_performance.png">
 
@@ -62,7 +62,7 @@ It is not a historically wealthy zip code, nor does it rival the density of rest
 
 ## Next Steps
 
-This elementary analysis reveals an underlying trend that prompts further exploration. For my project I propose to expand these efforts by building a model that leverages the wealth of microscopic information in the licensing data. I plan to combine the rates of addition, renewal, and turnover for each type of licenses with the licensing history of each neighborhood in a network-based model that captures the spatiotemporal landscape of Chicago's small business economy. By projecting licensing data from each zipcode onto a weighted graph connecting adjacent zipcodes, a network-based model will allow for businesses influencing the perceived value of adjacent zipcodes. I plan to train this model formulation on a subset of the available data then validate the model by predicting the property value trends in the remaining data. My goal for the project is to achieve a prediction accuracy comparable to Zillow (<5% error) while identifying the features that reflect up and coming neighborhoods.
+This elementary analysis reveals an underlying trend that prompts further exploration. For my project I propose to expand these efforts by building a model that leverages the wealth of microscopic information in the licensing data. I plan to combine the rates of addition, renewal, and turnover for each type of licenses with the licensing history of each neighborhood in a network-based model that captures the spatiotemporal landscape of Chicago's small business economy. By projecting licensing data from each zip code onto a weighted graph connecting adjacent zip codes, a network-based model will allow for businesses influencing the perceived value of adjacent zip codes. I plan to train this model formulation on a subset of the available data then validate the model by predicting the property value trends in the remaining data. My goal for the project is to achieve a prediction accuracy comparable to Zillow (<5% error) while identifying the features that reflect up and coming neighborhoods.
 
 
 ## Repository Contents
