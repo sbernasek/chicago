@@ -32,6 +32,9 @@ class CityMap:
         self.ziplimits = gpd.read_file(join(dirpath, 'chicago_zips.geojson'))
         self.ziplimits.zip = self.ziplimits.zip.astype(int)
 
+        # exclude NaNs
+        timeseries = timeseries[~timeseries.isna().any(axis=1)]
+
         # add timeseries (smoothed)
         self.timeseries = timeseries.resample('1M', axis=0).interpolate().transpose()
 
