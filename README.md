@@ -30,6 +30,8 @@ For my project, I plan to build a predictive model relating the many complex fea
 
 ## Preliminary Analysis
 
+#### Business License Trends
+
 As an initial effort, I obtained and pre-processed the license and real estate data, then surveyed their dynamic trends. Some anomalies unique to Chicago caught my attention. Most notably, the city government consolidated its licensing categories in 2012 leading to an abnormally high rate of apparent license turnover in 2011/2012. I excluded those two years from the data, then imputed their values from 2013. I then compiled license renewal, addition, and turnover timeseries for each zipcode in Chicago. The magnitudes of these quantities depdend upon the size and population density of each zipcode, so I normalized the rates of license addition (newly issued) and turnover (cancelled/revoked) by the annual renewal rate. The timeseries data are quite noisy so I applied some smoothing where necessary. The data reflect a substantial city-wide decrease in the rate of license renewals that coincides with the 2008 recession.
 
 <img src="figures/renewals.png">
@@ -38,6 +40,8 @@ However, new licenses seem to be introduced at a fairly constant overall rate.
 
 <img src="figures/additions.png">
 
+
+#### Property Value Trends
 
 The real estate data reflect a known reality: Chicago's North side has higher property values than its South side.
 
@@ -61,16 +65,16 @@ It is not a historically wealthy zip code, nor does it rival the density of rest
 This elementary analysis reveals an underlying trend that prompts further exploration. For my project I propose to expand these efforts by building a model that leverages the wealth of microscopic information in the licensing data. I plan to combine the rates of addition, renewal, and turnover for each type of licenses with the licensing history of each neighborhood in a network-based model that captures the spatiotemporal landscape of Chicago's small business economy. By projecting licensing data from each zipcode onto a weighted graph connecting adjacent zipcodes, a network-based model will allow for businesses influencing the perceived value of adjacent zipcodes. I plan to train this model formulation on a subset of the available data then validate the model by predicting the property value trends in the remaining data. My goal for the project is to achieve a prediction accuracy comparable to Zillow (<5% error) while identifying the features that reflect up and coming neighborhoods.
 
 
-# Repository Contents
+## Repository Contents
 
 The repository is organized into several subdirectories:
 
-  - notebooks : jupyter notebooks used to conduct the preliminary analysis
+  - **notebooks**: jupyter notebooks used to conduct the preliminary analysis
 
-  - modules : python modules used to conduct the preliminary analysis
+  - **modules**: python modules used to conduct the preliminary analysis
 
-  - figures : rendered figures
+  - **figures**: rendered figures
 
-  - videos : animated figures
+  - **videos**: animated figures
 
-  - tables : rendered tables
+  - **tables**: rendered tables
