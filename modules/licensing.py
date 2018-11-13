@@ -3,6 +3,9 @@ import pandas as pd
 import re
 import geopandas as gpd
 
+date_columns = ['DATE_START', 'DATE_END', 'DATE_CREATED', 'DATE_COMPLETE', 'DATE_PAID', 'DATE_APPROVED', 'DATE_ISSUED' , 'DATE_CHANGED']
+
+
 
 zip_pattern = re.compile('\d{5}')
 def format_zip(zipstr):
@@ -122,3 +125,100 @@ dtypes = {
     'LONGITUDE': float,
     'LOCATION': str
 }
+
+
+from copy import deepcopy
+
+
+class License:
+
+    def __init__(self, records):
+        self.records = records
+        self.parse_records()
+
+    def parse_records(self):
+
+        # determine origin and start date
+        self.original, self.start_date = self.determine_origin(self.records)
+
+        # determine current status and end date
+        self.status, self.end_date = self.parse_status(self.records)
+
+        # determine license continuity
+        self.continuous = self.parse_continuity(self.records)
+
+    @staticmethod
+    def determine_origin(records):
+
+        original = True
+
+        if (records.STATUS=='AAC').all():
+            start_date = records.DATE_START.min()
+        else:
+            start_date = records.START.min()
+
+        # check if a new application was submitted
+        if 'ISSUE' in records.APPLICATION_TYPE.unique():
+            original = False
+
+        # check if earliest record predates data
+        elif start_date.year > 2004:
+            original = False
+
+        return original, start_date
+
+    @staticmethod
+    def parse_status(records):
+
+        if records.iloc[-1].STATUS == 'AAC':
+            status = 'CANCELLED'
+            end_date = records.iloc[-1]['DATE_CHANGED']
+
+        elif records.iloc[-1].STATUS == 'REV':
+            status = 'REVOKED'
+            end_date = records.iloc[-1]['DATE_CHANGED']
+
+        elif records.END.max() <= pd.Timestamp.today():
+            status = 'EXPIRED'
+            end_date = records.END.max()
+
+        else:
+            status = 'ACTIVE'
+            end_date = pd.Timestamp.today()
+
+        return status, end_date
+
+    @staticmethod
+    def parse_continuity(records, max_gap=365):
+        """ Determine lifespace of license. """
+
+        gap = lambda x: abs(x.days) <= max_gap
+
+        records = records[records.STATUS=='AAI']
+
+        # get successive records
+        successive = (records.START-records.END.shift(1)).apply(gap)
+        if successive.iloc[1:].all():
+            contiguous = True
+        else:
+            contiguous = False
+
+        return contiguous
+
+    def aggregate(self):
+
+        keys = ['LICENSE_NUMBER', 'ACCOUNT_ID', 'SITE_ID', 'CODE', 'CODE_DESCRIPTION', 'ACTIVITY_ID', 'ACTIVITY']
+
+        # extract nominal license properties
+        record_dict = self.records[keys].iloc[0].to_dict()
+
+        # add new properties
+        properties = dict(
+            START=self.start_date,
+            END=self.end_date,
+            STATUS=self.status,
+            ORIGINAL=self.original,
+            CONTINUOUS=self.continuous)
+        record_dict.update(properties)
+
+        return record_dict
