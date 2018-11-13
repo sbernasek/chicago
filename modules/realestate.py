@@ -27,7 +27,7 @@ class ZillowAPI:
 class RealEstateData:
     """ Interface to real estate value data. """
 
-    def __init__(self, path='./chicago/realestate.hdf'):
+    def __init__(self, path='../data/processed/realestate.hdf'):
         self.path = path
 
         # load keys
@@ -70,7 +70,7 @@ class RealEstateData:
         return timeseries
 
     @staticmethod
-    def download(zipcodes, destination='./chicago/realestate.hdf'):
+    def download(zipcodes, destination='../data/processed/realestate.hdf'):
         """
         Query real estate value data from Zillow API and save to file.
         """

@@ -1,4 +1,4 @@
 *.docx
-chicago/
+data/
 .ipynb_checkpoints
 __pycache__/
